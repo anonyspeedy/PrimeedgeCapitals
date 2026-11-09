@@ -1,0 +1,196 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ *
+ * Theme tokens. Light values live on :root, dark values on .dark, and
+ * `@theme inline` exposes them to Tailwind utilities so a single class
+ * (bg-surface / text-muted / border-line) themes itself automatically.
+ * ------------------------------------------------------------------ */
+:root {
+  --fn-page: #eef0f7;
+  --fn-page-glow: linear-gradient(154deg, #efedfb 0%, #e0e6ef 100%);
+  --fn-surface: #ffffff;
+  --fn-elevated: #f5f6fb;
+  --fn-elevated-2: #eceefa;
+  --fn-line: #e3e5f0;
+  --fn-line-strong: #d3d6e8;
+  --fn-ink: #14161f;
+  --fn-muted: #5f6478;
+  --fn-faint: #61667d;
+  --fn-chip: #f1f2f9;
+  --fn-overlay: rgb(16 18 27 / 0.45);
+  /* Status and brand hues need extra depth on white surfaces to stay legible. */
+  --fn-success: #08703c;
+  --fn-mint: #07704f;
+  --fn-danger: #c2261f;
+  --fn-warn: #8a5100;
+  --fn-brand-ink: #453cd0;
+  --fn-on-danger: #ffffff;
+}
+
+.dark {
+  --fn-page: #10121b;
+  --fn-page-glow: radial-gradient(1200px 600px at 15% -10%, #1b1b38 0%, #10121b 60%);
+  --fn-surface: #181b26;
+  --fn-elevated: #202134;
+  --fn-elevated-2: #232338;
+  --fn-line: #2b2c40;
+  --fn-line-strong: #333151;
+  --fn-ink: #ffffff;
+  --fn-muted: #a2a7bd;
+  --fn-faint: #8f95ab;
+  --fn-chip: #202134;
+  --fn-overlay: rgb(4 5 9 / 0.7);
+  --fn-success: #23d72d;
+  --fn-mint: #05e594;
+  --fn-danger: #ff5f5f;
+  --fn-warn: #ffb020;
+  --fn-brand-ink: #9a94ff;
+  --fn-on-danger: #2a0a08;
+}
+
+@theme inline {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --color-page: var(--fn-page);
+  --color-surface: var(--fn-surface);
+  --color-elevated: var(--fn-elevated);
+  --color-elevated-2: var(--fn-elevated-2);
+  --color-line: var(--fn-line);
+  --color-line-strong: var(--fn-line-strong);
+  --color-ink: var(--fn-ink);
+  --color-muted: var(--fn-muted);
+  --color-faint: var(--fn-faint);
+  --color-chip: var(--fn-chip);
+  --color-overlay: var(--fn-overlay);
+
+  --color-brand: #635bff;
+  --color-brand-ink: var(--fn-brand-ink);
+  --color-on-danger: var(--fn-on-danger);
+  --color-brand-soft: #675aff;
+  --color-brand-deep: #4632f5;
+  --color-success: var(--fn-success);
+  --color-mint: var(--fn-mint);
+  --color-danger: var(--fn-danger);
+  --color-danger-surface: #361c19;
+  --color-warn: var(--fn-warn);
+
+  --radius-card: 12px;
+  --radius-pill: 999px;
+}
+
+@layer base {
+  html {
+    color-scheme: light dark;
+  }
+
+  body {
+    @apply bg-page text-ink font-sans antialiased;
+    background-image: var(--fn-page-glow);
+    background-attachment: fixed;
+    font-size: 14px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, #635bff 45%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid #635bff;
+    outline-offset: 2px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--fn-line-strong) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: var(--fn-line-strong);
+    border-radius: 999px;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface border-line rounded-card border;
+  }
+
+  .tile {
+    @apply bg-elevated border-line rounded-lg border;
+  }
+
+  .label-xs {
+    @apply text-faint text-[11px] font-medium tracking-wide uppercase;
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  /* Horizontal chip rails on small screens, plain rows on desktop. */
+  .rail {
+    @apply -mx-3 flex gap-1.5 overflow-x-auto px-3 pb-1 sm:mx-0 sm:px-0;
+    scrollbar-width: none;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes fn-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fn-sheet {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes fn-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.anim-in {
+  animation: fn-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.anim-sheet {
+  animation: fn-sheet 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.anim-fade {
+  animation: fn-fade 0.2s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-in,
+  .anim-sheet,
+  .anim-fade {
+    animation: none;
+  }
+}
